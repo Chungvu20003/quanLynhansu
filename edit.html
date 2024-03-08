@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management</title>
+    <style>
+        /* CSS styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 400px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .action-buttons {
+            display: flex;
+        }
+
+        .action-buttons button {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>Employee Management</h1>
+
+<!-- Form for adding new employee -->
+<h2>Add Employee</h2>
+<form id="addEmployeeForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name"><br>
+
+    <label for="department">Department:</label>
+    <input type="text" id="department" name="department"><br>
+
+    <label for="salary">Salary:</label>
+    <input type="number" id="salary" name="salary"><br>
+
+    <button type="button" onclick="addEmployee()">Add Employee</button>
+</form>
+
+<!-- Table to display employee information -->
+<h2>Employee List</h2>
+<table id="employeeTable">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Department</th>
+        <th>Salary</th>
+        <th>Action</th>
+    </tr>
+    <!-- Employee data will be displayed here -->
+</table>
+
+<script>
+    // JavaScript code
+    var employees = [];
+
+    function addEmployee() {
+        var name = document.getElementById("name").value;
+        var department = document.getElementById("department").value;
+        var salary = document.getElementById("salary").value;
+
+        var newEmployee = {
+            id: employees.length + 1,
+            name: name,
+            department: department,
+            salary: salary
+        };
+
+        employees.push(newEmployee);
+
+        displayEmployeeTable();
+
+        document.getElementById("name").value = "";
+        document.getElementById("department").value = "";
+        document.getElementById("salary").value = "";
+    }
+
+    function displayEmployeeTable() {
+        var table = document.getElementById("employeeTable");
+        table.innerHTML = "";
+
+        employees.forEach(function(employee) {
+            var row = table.insertRow();
+            row.insertCell(0).textContent = employee.id;
+            row.insertCell(1).textContent = employee.name;
+            row.insertCell(2).textContent = employee.department;
+            row.insertCell(3).textContent = employee.salary;
+
+            var actionCell = row.insertCell(4);
+
+            var editButton = document.createElement("button");
+            editButton.textContent = "Edit";
+            editButton.onclick = function() {
+                editEmployee(employee.id);
+            };
+            actionCell.appendChild(editButton);
+
+            var deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.onclick = function() {
+                deleteEmployee(employee.id);
+            };
+            actionCell.appendChild(deleteButton);
+        });
+    }
+
+    function editEmployee(id) {
+        var index = employees.findIndex(function(employee) {
+            return employee.id === id;
+        });
+
+        if (index !== -1) {
+            var newName = prompt("Enter new name:", employees[index].name);
+            var newDepartment = prompt("Enter new department:", employees[index].department);
+            var newSalary = prompt("Enter new salary:", employees[index].salary);
+
+            employees[index].name = newName || employees[index].name;
+            employees[index].department = newDepartment || employees[index].department;
+            employees[index].salary = newSalary || employees[index].salary;
+
+            displayEmployeeTable();
+        }
+    }
+
+    function deleteEmployee(id) {
+        var index = employees.findIndex(function(employee) {
+            return employee.id === id;
+        });
+
+        if (index !== -1) {
+            employees.splice(index, 1);
+            displayEmployeeTable();
+        }
+    }
+</script>
+</body>
+</html>
